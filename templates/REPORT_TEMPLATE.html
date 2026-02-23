@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Executive Career Intelligence Report</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+body {
+
+ font-family: 'Inter', sans-serif;
+ margin: 0;
+ padding: 0;
+ color: #111;
+ background: #ffffff;
+ line-height: 1.6;
+
+}
+
+/* Page Layout */
+
+.page {
+
+ width: 800px;
+ margin: 0 auto;
+ padding: 60px 40px;
+
+}
+
+/* Cover Page */
+
+.cover {
+
+ height: 1000px;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+
+}
+
+.cover h1 {
+
+ font-size: 42px;
+ font-weight: 500;
+ margin-bottom: 20px;
+
+}
+
+.cover h2 {
+
+ font-size: 20px;
+ font-weight: 400;
+ color: #666;
+
+}
+
+.cover .meta {
+
+ margin-top: 60px;
+ font-size: 16px;
+ color: #333;
+
+}
+
+/* Section */
+
+.section {
+
+ margin-top: 60px;
+
+}
+
+.section-title {
+
+ font-size: 24px;
+ font-weight: 500;
+ margin-bottom: 20px;
+ border-bottom: 1px solid #ddd;
+ padding-bottom: 10px;
+
+}
+
+/* Executive Summary Box */
+
+.summary {
+
+ background: #f7f7f7;
+ padding: 20px;
+ border-left: 4px solid #111;
+ margin-bottom: 20px;
+
+}
+
+.summary-title {
+
+ font-weight: 600;
+ margin-bottom: 10px;
+
+}
+
+/* Paragraph */
+
+p {
+
+ margin-bottom: 16px;
+ font-size: 16px;
+
+}
+
+/* Strategic Recommendation */
+
+.recommendation {
+
+ margin-top: 20px;
+ padding: 20px;
+ background: #fafafa;
+ border-left: 4px solid #333;
+
+}
+
+.recommendation-title {
+
+ font-weight: 600;
+ margin-bottom: 10px;
+
+}
+
+/* Footer */
+
+.footer {
+
+ margin-top: 80px;
+ font-size: 12px;
+ color: #999;
+ text-align: center;
+
+}
+
+/* Page Break */
+
+.page-break {
+
+ page-break-after: always;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- COVER PAGE -->
+
+<div class="page cover">
+
+<h1>Executive Career Intelligence Report</h1>
+
+<h2>Personal Strategic Analysis</h2>
+
+<div class="meta">
+
+Prepared for:<br>
+<strong>{{nickname}}</strong>
+
+<br><br>
+
+Date:<br>
+{{date}}
+
+</div>
+
+</div>
+
+<div class="page-break"></div>
+
+
+<!-- SECTION TEMPLATE START -->
+
+<div class="page">
+
+<div class="section">
+
+<div class="section-title">
+
+{{section_title}}
+
+</div>
+
+
+<div class="summary">
+
+<div class="summary-title">
+
+Executive Insight
+
+</div>
+
+<p>
+
+{{executive_summary}}
+
+</p>
+
+</div>
+
+
+<p>
+
+{{paragraph_1}}
+
+</p>
+
+<p>
+
+{{paragraph_2}}
+
+</p>
+
+<p>
+
+{{paragraph_3}}
+
+</p>
+
+<p>
+
+{{paragraph_4}}
+
+</p>
+
+
+<div class="recommendation">
+
+<div class="recommendation-title">
+
+Strategic Recommendation
+
+</div>
+
+<p>
+
+{{recommendation}}
+
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION TEMPLATE END -->
+
+
+<!-- FINAL SUMMARY -->
+
+<div class="page">
+
+<div class="section">
+
+<div class="section-title">
+
+Strategic Summary
+
+</div>
+
+<p>
+
+{{final_summary}}
+
+</p>
+
+</div>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<div class="page footer">
+
+<p>
+
+Confidential Career Intelligence Report<br>
+© Career Intelligence
+
+</p>
+
+</div>
+
+
+</body>
+</html>

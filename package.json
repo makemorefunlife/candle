@@ -1,0 +1,57 @@
+{
+  "name": "hrsaas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Your Personal Operating Manual - Career Intelligence Platform",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "build:core": "pnpm --filter @orrery/core build",
+    "test": "pnpm --filter @orrery/core test",
+    "supabase:types": "supabase gen types typescript --local > lib/supabase/database.types.ts 2>/dev/null || echo 'Note: Run this command after setting up Supabase CLI and connecting to your project'",
+    "supabase:env": "node scripts/setup-supabase-env.js",
+    "supabase:env:mcp": "node scripts/setup-env-from-mcp.mjs",
+    "supabase:link": "supabase link --project-ref",
+    "supabase:status": "supabase status"
+  },
+  "keywords": [
+    "career-intelligence",
+    "performance-analysis",
+    "behavioral-analysis",
+    "chronological-analysis"
+  ],
+  "author": "",
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@10.23.0",
+  "dependencies": {
+    "@clerk/nextjs": "^6.38.0",
+    "@google/generative-ai": "^0.24.1",
+    "@orrery/core": "^0.3.0",
+    "@supabase/supabase-js": "^2.97.0",
+    "next": "^16.1.6",
+    "nodemailer": "^8.0.1",
+    "openai": "^6.22.0",
+    "puppeteer": "^24.37.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "svix": "^1.85.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.0",
+    "@types/node": "^25.3.0",
+    "@types/nodemailer": "^7.0.10",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.24",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.2.0",
+    "typescript": "~5.9.3"
+  }
+}

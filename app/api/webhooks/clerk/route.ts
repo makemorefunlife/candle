@@ -34,7 +34,8 @@ export async function POST(req: Request) {
   const payload = await req.json()
 
   // Svix를 사용하여 webhook 검증
-  const wh = new Webhook(WEBHOOK_SECRET)
+  // WEBHOOK_SECRET은 상단에서 체크되므로 undefined가 아님을 보장
+  const wh = new Webhook(WEBHOOK_SECRET as string)
 
   let evt: any
 

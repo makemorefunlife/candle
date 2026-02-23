@@ -62,20 +62,28 @@ export async function queryByClerkUserId<T>(
  * @param params 페이지네이션 파라미터
  * @returns 페이지네이션이 적용된 쿼리
  */
-export function applyPagination<T>(
-  query: ReturnType<SupabaseClient['from']>,
+type RangeCapable<TQuery> = {
+  range(from: number, to: number): TQuery
+}
+
+type OrderCapable<TQuery> = {
+  order(column: string, options?: { ascending?: boolean }): TQuery
+}
+
+export function applyPagination<TQuery extends RangeCapable<TQuery>>(
+  query: TQuery,
   params: PaginationParams
-) {
+): TQuery {
   const { from, to, page, pageSize } = params
 
   if (from !== undefined && to !== undefined) {
-    return query.range(from, to) as typeof query
+    return query.range(from, to)
   }
 
   if (page !== undefined && pageSize !== undefined) {
     const start = (page - 1) * pageSize
     const end = start + pageSize - 1
-    return query.range(start, end) as typeof query
+    return query.range(start, end)
   }
 
   return query
@@ -88,13 +96,13 @@ export function applyPagination<T>(
  * @param params 정렬 파라미터
  * @returns 정렬이 적용된 쿼리
  */
-export function applySort<T>(
-  query: ReturnType<SupabaseClient['from']>,
+export function applySort<TQuery extends OrderCapable<TQuery>>(
+  query: TQuery,
   params: SortParams
-) {
+): TQuery {
   return query.order(params.column, {
     ascending: params.ascending ?? true,
-  }) as typeof query
+  })
 }
 
 /**

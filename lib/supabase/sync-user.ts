@@ -78,9 +78,11 @@ export async function syncUserToSupabase(clerkUser: ClerkUserData) {
   }
 
   // Upsert (있으면 업데이트, 없으면 생성)
+  // Database 타입이 Record<string, never>로 정의되어 있어 타입 추론이 되지 않음
+  // 실제 런타임에서는 정상 동작하므로 타입 단언 사용
   const { data, error } = await supabase
     .from('users')
-    .upsert(userData, {
+    .upsert(userData as any, {
       onConflict: 'clerk_user_id',
       ignoreDuplicates: false,
     })

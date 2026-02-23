@@ -10,7 +10,10 @@ import fs from 'fs'
 import path from 'path'
 import nodemailer from 'nodemailer'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import puppeteer from 'puppeteer'
+// NEW: 서버리스 호환 PDF 생성 라이브러리
+import { htmlToPdf } from '@/lib/pdf/html-to-pdf'
+// LEGACY: Puppeteer (롤백용, 비활성화)
+// import puppeteer from 'puppeteer'
 
 /**
  * Paddle Checkout URL 생성 함수
@@ -131,7 +134,9 @@ const openaiApiKey = process.env.OPENAI_API_KEY
 
 const genAI = googleAiApiKey ? new GoogleGenerativeAI(googleAiApiKey) : null
 
-// PDF 생성 함수 (B2_REPORT_GENERATOR 로직)
+// ============================================================================
+// NEW: 서버리스 호환 PDF 생성 함수 (pdfkit 사용)
+// ============================================================================
 async function generatePremiumReport(baziAnalysis: any, userMeta: any) {
   try {
     // 경로 설정
@@ -217,7 +222,7 @@ async function generatePremiumReport(baziAnalysis: any, userMeta: any) {
       .replace('{{BENTO_GRID}}', generateBentoHTML(reportData.bento || {}))
       .replace('{{ENERGY_CHART}}', generateEnergyChart(reportData.energy_chart || {}))
 
-    // STEP 6: Generate PDF
+    // STEP 6: Generate PDF (NEW: 서버리스 호환 방식)
     if (!fs.existsSync(OUTPUT_DIR)) {
       fs.mkdirSync(OUTPUT_DIR, { recursive: true })
     }
@@ -225,6 +230,59 @@ async function generatePremiumReport(baziAnalysis: any, userMeta: any) {
     const fileName = `report_${Date.now()}.pdf`
     const filePath = path.join(OUTPUT_DIR, fileName)
 
+    try {
+      // NEW: pdfkit을 사용한 HTML to PDF 변환 (브라우저 없이 동작)
+      const pdfBuffer = await htmlToPdf(template, {
+        format: 'A4',
+        printBackground: true,
+        margin: {
+          top: 40,
+          bottom: 40,
+          left: 30,
+          right: 30,
+        },
+      })
+
+      // PDF 버퍼를 파일로 저장
+      fs.writeFileSync(filePath, pdfBuffer)
+
+      return {
+        success: true,
+        filePath,
+        fileName,
+      }
+    } catch (pdfError) {
+      console.error('PDF 생성 오류 (새 방식):', pdfError)
+      // 새 방식 실패 시 legacy 방식으로 폴백 (선택사항)
+      // return await generatePremiumReportLegacy(baziAnalysis, userMeta, template, filePath, fileName)
+      throw pdfError
+    }
+  } catch (error) {
+    console.error('PDF 생성 오류:', error)
+    return {
+      success: false,
+      error: 'PREMIUM_REPORT_FAILED',
+    }
+  }
+}
+
+// ============================================================================
+// LEGACY: Puppeteer 기반 PDF 생성 함수 (롤백용)
+// ============================================================================
+// 롤백 방법:
+// 1. 위의 generatePremiumReport 함수에서 새 PDF 생성 부분을 주석 처리
+// 2. 아래 generatePremiumReportLegacy 함수의 주석을 해제
+// 3. route.ts에서 generatePremiumReportLegacy를 호출하도록 변경
+// ============================================================================
+/*
+async function generatePremiumReportLegacy(
+  baziAnalysis: any,
+  userMeta: any,
+  template: string,
+  filePath: string,
+  fileName: string
+) {
+  try {
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -250,13 +308,14 @@ async function generatePremiumReport(baziAnalysis: any, userMeta: any) {
       fileName,
     }
   } catch (error) {
-    console.error('PDF 생성 오류:', error)
+    console.error('PDF 생성 오류 (Legacy):', error)
     return {
       success: false,
       error: 'PREMIUM_REPORT_FAILED',
     }
   }
 }
+*/
 
 // Bento Grid HTML 생성
 function generateBentoHTML(bento: any) {

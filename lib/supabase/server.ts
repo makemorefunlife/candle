@@ -35,7 +35,9 @@ const supabaseAnonKey = getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY')
  * @returns Supabase 클라이언트 인스턴스
  */
 export function createServerClient() {
-  const cookieStore = cookies()
+  // cookies()는 Next.js 16에서 동기 함수이지만 타입 정의가 Promise로 되어 있을 수 있음
+  // 실제 런타임에서는 동기적으로 동작하므로 타입 단언 사용
+  const cookieStore = cookies() as unknown as Awaited<ReturnType<typeof cookies>>
 
   return createClient<Database>(supabaseUrl, supabaseAnonKey, {
     auth: {
@@ -43,6 +45,8 @@ export function createServerClient() {
       autoRefreshToken: false,
       detectSessionInUrl: false,
     },
+    // cookies 옵션은 Supabase에서 지원하지만 타입 정의에 포함되지 않았을 수 있음
+    // 실제 런타임에서는 정상 동작하므로 타입 단언 사용
     cookies: {
       get(name: string) {
         return cookieStore.get(name)?.value
@@ -63,7 +67,7 @@ export function createServerClient() {
         }
       },
     },
-  })
+  } as Parameters<typeof createClient<Database>>[2])
 }
 
 /**
